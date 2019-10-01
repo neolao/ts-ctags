@@ -1,0 +1,8 @@
+{
+  "name": "ts-ctags",
+  "version": "0.0.1",
+  "author": "neolao <contact@neolao.com>",
+  "description": "Ctags-like generator for TypeScript",
+  "repository": "https://github.com/solfegejs/eslint-plugin.git",
+  "license": "MIT"
+}
