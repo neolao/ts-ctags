@@ -7,7 +7,7 @@ var glob = require('glob');
 var _ = require('lodash');
 var ts = require('typescript');
 var pkg = require('./package.json');
-var USAGE = "" + pkg.name + " v" + pkg.version + "\n\nUsage: tstags [options] [FILE]...\n\nOptions:\n  -h, --help          show this help message and exit\n  -v, --version       show version and exit\n  -f, --file [-]      write output to specified file. If file is \"-\", output is written to standard out\n  -R, --recursive     recurse into directories in the file list [default: false]\n  --fields <fields>   include selected extension fields\n  --list-kinds        list supported languages\n  --sort              sort tags [default: false]\n  --target <version>  targeting language version [default: ES2019]\n  --tag-relative      file paths should be relative to the directory containing the tag file [default: false]\n";
+var USAGE = "" + pkg.name + " v" + pkg.version + "\n\nUsage: tstags [options] [FILE]...\n\nOptions:\n  -h, --help          show this help message and exit\n  -v, --version       show version and exit\n  -f, --file [-]      write output to specified file. If file is \"-\", output is written to standard out\n  -R, --recursive     recurse into directories in the file list [default: false]\n  --fields <fields>   include selected extension fields\n  --list-kinds        list supported languages\n  --sort              sort tags [default: false]\n  --target <version>  targeting language version [default: ES6]\n  --tag-relative      file paths should be relative to the directory containing the tag file [default: false]\n";
 var fields = {};
 fields[ts.SyntaxKind.Property] = ['p', 'property'];
 fields[ts.SyntaxKind.Method] = ['m', 'method'];
@@ -27,7 +27,7 @@ kinds.push('c  const');
 var scriptTargets = {
     ES3: ts.ScriptTarget.ES3,
     ES5: ts.ScriptTarget.ES5,
-    ES2019: ts.ScriptTarget.ES2019,
+    ES6: ts.ScriptTarget.ES6,
     Latest: ts.ScriptTarget.Latest,
 };
 var Tags = (function () {
