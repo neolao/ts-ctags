@@ -1,11 +1,17 @@
 {
   "name": "ts-ctags",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "neolao <contact@neolao.com>",
   "description": "Ctags-like generator for TypeScript",
   "repository": "https://github.com/neolao/ts-ctags.git",
   "license": "MIT",
   "bin": {
     "ts-ctags": "./ts-ctags.js"
+  },
+  "dependencies": {
+    "docopt": "^0.6.2",
+    "glob": "^7.1.4",
+    "lodash": "^4.17.15",
+    "typescript": "^3.6.3"
   }
 }
