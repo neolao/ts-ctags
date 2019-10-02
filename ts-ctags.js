@@ -7,15 +7,9 @@ const glob = require("glob");
 const _ = require("lodash");
 const ts = require("typescript");
 const pkg = require("./package.json");
-
-const matchOperatorsRe = /[/^$]/g;
-function escapeStringRegexp(str) {
-  return str.replace(matchOperatorsRe, "\\$&");
-}
-const endingsRe = /(?:\r\n|\r|\n)/;
-function splitLines(str) {
-  return str.split(endingsRe);
-}
+const escapeStringRegexp = require("./src/util/escapeStringRegexp");
+const splitLines = require("./src/util/splitLines");
+const Tags = require("./src/Tags");
 
 const USAGE = `${pkg.name} v${pkg.version}
 \n\nUsage: tstags [options] [FILE]...\n\nOptions:\n  -h, --help          show this help message and exit\n  -v, --version       show version and exit\n  -f, --file [-]      write output to specified file. If file is "-", output is written to standard out\n  -R, --recursive     recurse into directories in the file list [default: false]\n  --fields <fields>   include selected extension fields\n  --list-kinds        list supported languages\n  --sort              sort tags [default: false]\n  --target <version>  targeting language version [default: ES6]\n  --tag-relative      file paths should be relative to the directory containing the tag file [default: false]\n`;
@@ -39,50 +33,7 @@ const kinds = _.uniq(
   })
 );
 kinds.push("c  const");
-const scriptTargets = {
-  ES3: ts.ScriptTarget.ES3,
-  ES5: ts.ScriptTarget.ES5,
-  ES6: ts.ScriptTarget.ES6,
-  Latest: ts.ScriptTarget.Latest
-};
-class Tags {
-  constructor(options) {
-    const opt = options || {};
-    this.sort = opt.sort || false;
-    this.entries = [];
-  }
-
-  headers() {
-    const sorted = this.sort ? "1" : "0";
-    return [
-      { header: "_TAG_FILE_FORMAT", value: "2", help: 'extended format; --format=1 will not append ;" to lines' },
-      { header: "_TAG_FILE_SORTED", value: sorted, help: "0=unsorted, 1=sorted, 2=foldcase" },
-      { header: "_TAG_PROGRAM_NAME", value: "ts-ctags" },
-      { header: "_TAG_PROGRAM_URL", value: "https://github.com/neolao/ts-ctags" },
-      { header: "_TAG_PROGRAM_VERSION", value: "0.1" }
-    ];
-  }
-
-  toString() {
-    return this.writeHeaders()
-      .concat(this.writeEntries())
-      .join("\n");
-  }
-
-  writeHeaders() {
-    return this.headers().map(header => {
-      return `!${header.header}\t${header.value}\t${header.help || ""}`;
-    });
-  }
-
-  writeEntries() {
-    let sorted = this.entries;
-    if (this.sort) sorted = _.sortBy(this.entries, "name");
-    return sorted.map(entry => {
-      return `${entry.name}\t${entry.file}\t${entry.address};"\t${entry.field}\tline:${entry.line}`;
-    });
-  }
-}
+const scriptTargets = ts.ScriptTarget;
 
 function isNodePublic(node) {
   for (const key in node.modifiers) {
